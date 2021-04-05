@@ -1,0 +1,324 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>term2d</name>
+    </assembly>
+    <members>
+        <member name="T:term2d.Canvas">
+            <summary>
+                <para>
+                    Representation of a 2D area with discretely
+                    placed blocks to display in the console, each
+                    one with a foreground and background color.
+                </para>
+                <para>
+                    Includes methods to draw blocks over the Canvas
+                    and render the representation in the console.
+                </para>
+            </summary>
+        </member>
+        <member name="P:term2d.Canvas.DefaultBlock">
+            <summary>
+                The default character to draw for
+                empty blocks when the canvas is cleared
+                or initialized.
+            </summary>
+        </member>
+        <member name="P:term2d.Canvas.DefaultForegroundColor">
+            <summary>
+                The default foreground color to use for
+                new blocks with unspecified colors or
+                empty blocks when the canvas is cleared
+                or initialized.
+            </summary>
+        </member>
+        <member name="P:term2d.Canvas.DefaultBackgroundColor">
+            <summary>
+                The default background color to use for
+                new blocks with unspecified colors or
+                empty blocks when the canvas is cleared
+                or initialized.
+            </summary>
+        </member>
+        <member name="M:term2d.Canvas.#ctor">
+            <summary>
+                Initialize a Canvas with default values.
+            </summary>
+        </member>
+        <member name="M:term2d.Canvas.#ctor(System.Int32,System.Int32,System.Char,System.ConsoleColor,System.ConsoleColor)">
+            <summary>
+                Initialize a Canvas with provided values.
+            </summary>
+            <param name="width">
+                The width of the canvas.
+            </param>
+            <param name="height">
+                The height of the canvas.
+            </param>
+            <param name="block">
+                The default character to fill the canvas with.
+            </param>
+            <param name="fgColor">
+                The default color for new blocks.
+            </param>
+            <param name="bgColor">
+                The default background color for empty space.
+            </param>
+        </member>
+        <member name="M:term2d.Canvas.Initialize(System.Int32,System.Int32)">
+            <summary>
+                Initialize a Canvas with provided values.
+            </summary>
+            <param name="width">
+                The width of the canvas.
+            </param>
+            <param name="height">
+                The height of the canvas.
+            </param>
+        </member>
+        <member name="M:term2d.Canvas.Clear(System.Char,System.ConsoleColor,System.ConsoleColor)">
+            <summary>
+                Clears the canvas with the given settings.
+            </summary>
+            <param name="block">
+                The default character to fill the canvas with.
+            </param>
+            <param name="fgColor">
+                The default color for new blocks.
+            </param>
+            <param name="bgColor">
+                The default background color for empty space.
+            </param>
+        </member>
+        <member name="M:term2d.Canvas.Clear">
+            <summary>
+                Clears the canvas using default settings.
+            </summary>
+        </member>
+        <member name="M:term2d.Canvas.GetWidth">
+            <summary>
+                Get the width of the canvas, independent
+                of console window size.
+            </summary>
+            <returns>
+                The width of the canavs.
+            </returns>
+        </member>
+        <member name="M:term2d.Canvas.GetHeight">
+            <summary>
+                Get the height of the canvas, independent
+                of console window size.
+            </summary>
+            <returns>
+                The height of the canavs.
+            </returns>
+        </member>
+        <member name="M:term2d.Canvas.Render">
+            <summary>
+                <para>
+                    Renders the visible portion of the
+                    canvas in the console.
+                </para>
+                <para>
+                    Not recommended for manual use, let the
+                    framework game loop render Canvas objects.
+                </para>
+            </summary>
+        </member>
+        <member name="M:term2d.Canvas.Draw(System.Int32,System.Int32,System.Char,System.ConsoleColor,System.ConsoleColor)">
+            <summary>
+                Draw a single block at the specified
+                row and column.
+            </summary>
+        </member>
+        <member name="M:term2d.Canvas.Draw(System.Int32,System.Int32,System.Char)">
+            <summary>
+                Draw a single block at the specified
+                row and column with default colors.
+            </summary>
+        </member>
+        <member name="M:term2d.Canvas.DrawText(System.Int32,System.Int32,System.String,System.ConsoleColor,System.ConsoleColor)">
+            <summary>
+                Draws a string horizontally starting
+                from the specified row and column.
+            </summary>
+        </member>
+        <member name="M:term2d.Canvas.DrawText(System.Int32,System.Int32,System.String)">
+            <summary>
+                Draws a string horizontally starting
+                from the specified row and column
+                using default colors.
+            </summary>
+        </member>
+        <member name="T:term2d.ConsoleInputThread">
+            <summary>
+                Silently reads keys entered into the console to take user
+                input, runs in a separate thread to avoid blocking the
+                main thread.
+            </summary>
+        </member>
+        <member name="M:term2d.ConsoleInputThread.Start">
+            <summary>
+                Start taking user input.
+            </summary>
+        </member>
+        <member name="M:term2d.ConsoleInputThread.Stop">
+            <summary>
+                Stop taking user input.
+            </summary>
+        </member>
+        <member name="M:term2d.ConsoleInputThread.ReadLast">
+            <summary>
+                Returns the last ConsoleKey read from the user,
+                no guarantees the input is new.
+            </summary>
+        </member>
+        <member name="M:term2d.ConsoleInputThread.HasUnreadInput">
+            <summary>
+                Returns true if an unread input is available,
+                otherwise false.
+            </summary>
+        </member>
+        <member name="T:term2d.DefaultInitConfig">
+            <summary>
+                Performs default console initialization
+                procedures for UNIX-like systems.
+            </summary>
+        </member>
+        <member name="T:term2d.Game">
+            <summary>
+                Games using the term2D framework should
+                extend this abstract class, allowing the
+                framework to communicate with your game
+                in a standardized way.
+            </summary>
+        </member>
+        <member name="M:term2d.Game.Init(term2d.Canvas)">
+            <summary>
+                The Init() method will be called once
+                upon framework initialization.
+            </summary>
+            <param name="canvas">
+                A reference to the automatically created
+                Canvas object that will be rendered by default.
+            </param>
+        </member>
+        <member name="M:term2d.Game.Update(term2d.UpdateInfo)">
+            <summary>
+                The Update() method will be called continuously
+                by the framework as part of the core game loop.
+            </summary>
+            <param name="updateInfo">
+                A set of references and information received
+                by the framework including a reference to the
+                active Canvas, keyboard input information,
+                and time since the last update.
+            </param>
+            <returns>
+                true to continue running, false to end the game loop.
+            </returns>
+        </member>
+        <member name="T:term2d.InitConfig">
+            <summary>
+                An interface to abstract initialization
+                procedures for different platforms.
+            </summary>
+        </member>
+        <member name="T:term2d.Term2D">
+            <summary>
+                The core of the framework, initializes
+                the game and controls the game loop.
+            </summary>
+        </member>
+        <member name="F:term2d.Term2D.ActiveCanvas">
+            <summary>
+                The active canvas to render on screen.
+            </summary>
+        </member>
+        <member name="F:term2d.Term2D.TargetFPS">
+            <summary>
+                The maximum FPS the game will attempt to reach.
+            </summary>
+        </member>
+        <member name="F:term2d.Term2D.UnlimitedFPS">
+            <summary>
+                When true, disables frame limits and instead
+                attempts to reach the maximum possible framerate.
+            </summary>
+        </member>
+        <member name="M:term2d.Term2D.Start(term2d.Game)">
+            <summary>
+                Starts the provided game using the
+                framework.
+            </summary>
+        </member>
+        <member name="M:term2d.Term2D.GameLoop(term2d.Game)">
+            <summary>
+                The primary game loop.
+            </summary>
+        </member>
+        <member name="T:term2d.UpdateInfo">
+            <summary>
+                A struct to pass framework information
+                to the game on each update.
+            </summary>
+        </member>
+        <member name="P:term2d.UpdateInfo.ActiveCanvas">
+            <summary>
+                Reference To The Active Canvas
+            </summary>
+        </member>
+        <member name="P:term2d.UpdateInfo.LastInput">
+            <summary>
+                The last key entered by the user.
+            </summary>
+        </member>
+        <member name="P:term2d.UpdateInfo.HasUnreadInput">
+            <summary>
+                Whether the input is new or has been previously read.
+            </summary>
+        </member>
+        <member name="P:term2d.UpdateInfo.DeltaTime">
+            <summary>
+                Time since the last update, in seconds.
+            </summary>
+        </member>
+        <member name="T:term2d.WindowsInitConfig">
+            <summary>
+                A console configuration procedure specifically
+                for Windows systems that prevents problematic
+                default behaviors of cmd.exe through native functions.
+            </summary>
+        </member>
+        <member name="F:term2d.WindowsInitConfig.ENABLE_WRAP_AT_EOL_OUTPUT">
+            <summary>
+                Identifies a bit corresponding to a console setting
+                that must be enabled to prevent auto-scrolling
+                issues that prevent proper rendering.
+            </summary>
+        </member>
+        <member name="F:term2d.WindowsInitConfig.STD_OUTPUT_HANDLE">
+            <summary>
+                Used to request a standard output handle
+                using the Win32 API.
+            </summary>
+        </member>
+        <member name="M:term2d.WindowsInitConfig.GetStdHandle(System.Int32)">
+            <summary>
+                Used to request a standard output handle
+                using the Win32 API.
+            </summary>
+        </member>
+        <member name="M:term2d.WindowsInitConfig.GetConsoleMode(System.IntPtr,System.UInt32@)">
+            <summary>
+                Writes an unsigned integer with bits
+                representing console configuration settings.
+            </summary>
+        </member>
+        <member name="M:term2d.WindowsInitConfig.SetConsoleMode(System.IntPtr,System.UInt32)">
+            <summary>
+                Sets altered console configuration settings.
+            </summary>
+        </member>
+    </members>
+</doc>
