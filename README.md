@@ -12,6 +12,13 @@ Key | Action
 **P** | Pause
 **F** | Show FPS Counter
 
+# Running The Game
+The game is currently built on .NET 5.0; to run the project directly, use `dotnet run` in the project directory.
+
+Otherwise, use prebuilt binaries provided under tags/releases.
+
+The gameplay area defaults to the initial window size, so adjust the terminal window to the desired size before starting the game.
+
 # Screenshots
 Gameplay On Linux /w GNOME Terminal
 ![GNOME Terminal Gameplay](Screenshot/Gameplay-Linux-GNOME-Terminal.png)
