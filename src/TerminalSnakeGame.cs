@@ -69,7 +69,8 @@ namespace Term2DGame
             apple = new Point(appleX, appleY);
         }
 
-        int direction = 1; //1 is up, 2 is down, 3 is left, 4 is right
+        int queuedDirection = 1; //1 is up, 2 is down, 3 is left, 4 is right
+        int currentDirection = 1;
 
         override public bool Update(UpdateInfo updateInfo)
         {
@@ -84,20 +85,20 @@ namespace Term2DGame
                 switch (updateInfo.LastInput)
                 {
                     case ConsoleKey.UpArrow:
-                        if(direction != 2)
-                            direction = 1;
+                        if(currentDirection != 2)
+                            queuedDirection = 1;
                         break;
                     case ConsoleKey.DownArrow:
-                        if(direction != 1)
-                            direction = 2;
+                        if(currentDirection != 1)
+                            queuedDirection = 2;
                         break;
                     case ConsoleKey.LeftArrow:
-                        if(direction != 4)
-                            direction = 3;
+                        if(currentDirection != 4)
+                            queuedDirection = 3;
                         break;
                     case ConsoleKey.RightArrow:
-                        if(direction != 3)
-                            direction = 4;
+                        if(currentDirection != 3)
+                            queuedDirection = 4;
                         break;
                     case ConsoleKey.P:
                         paused = !paused;
@@ -120,7 +121,7 @@ namespace Term2DGame
             double movementInterval = Math.Max(INITIAL_SPEED_INTERVAL - ((double) score / MAX_SPEED_SCORE) * INITIAL_SPEED_INTERVAL, MIN_SPEED_INTERVAL);
             if(timer >= movementInterval)
             {
-                switch(direction)
+                switch(queuedDirection)
                 {
                     case 1:
                         x = snake[0].X;
@@ -141,6 +142,7 @@ namespace Term2DGame
                     default:
                         break;
                 }
+                currentDirection = queuedDirection;
                 snake.Insert(0, new Point(x, y));
                 if(appleEaten())
                 {
