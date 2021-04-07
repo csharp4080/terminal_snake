@@ -24,8 +24,9 @@ namespace Term2DGame
         }
 
         // Constants
-        const double BASE_SPEED_INTERVAL = 0.1;
-        const double MAX_SPEED_SCORE = 500;
+        const double INITIAL_SPEED_INTERVAL = 0.1; // initially how many seconds between each movement
+        const double MIN_SPEED_INTERVAL = 0.02; // the cap for how fast the interval can become
+        const double MAX_SPEED_SCORE = 750; // what score represents the fastest motion interval
 
         // Game Information
         List<Point> snake = new List<Point>();
@@ -34,6 +35,7 @@ namespace Term2DGame
         Random rand = new Random();
         int score = 0;
         bool showFPSCounter = false;
+        bool alive = true;
 
         override public void Init(Canvas canvas)
         {
@@ -111,35 +113,13 @@ namespace Term2DGame
             if(appleEaten())
             {
                 score += 10;
-                switch(direction)
-                {
-                    case 1:
-                        x = snake[0].X;
-                        y = snake[0].Y - 1;
-                        break;
-
-                    case 2:
-                        x = snake[0].X;
-                        y = snake[0].Y + 1;
-                        break;
-                    case 3:
-                        x = snake[0].X - 1;
-                        y = snake[0].Y;
-                        break;
-                    case 4:
-                        x = snake[0].X + 1;
-                        y = snake[0].Y;
-                        break;
-
-                    default:
-                        break;
-                }
-
-                snake.Insert(0, new Point(x, y));
+                Point last = snake[snake.Count - 1];
+                snake.Add(new Point(last.X, last.Y));
                 replaceApple(canvas);
             }
 
-            if(timer >= BASE_SPEED_INTERVAL - ((double) score / MAX_SPEED_SCORE) * BASE_SPEED_INTERVAL)
+            double movementInterval = Math.Max(INITIAL_SPEED_INTERVAL - ((double) score / MAX_SPEED_SCORE) * INITIAL_SPEED_INTERVAL, MIN_SPEED_INTERVAL);
+            if(timer >= movementInterval)
             {
                 switch(direction)
                 {
