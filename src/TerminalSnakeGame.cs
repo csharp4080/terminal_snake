@@ -106,17 +106,9 @@ namespace Term2DGame
             }
             // Update View
             Canvas canvas = updateInfo.ActiveCanvas;
-            // clear & draw frame on canvas
+            
             int x = 0;
             int y = 0;
-            
-            if(appleEaten())
-            {
-                score += 10;
-                Point last = snake[snake.Count - 1];
-                snake.Add(new Point(last.X, last.Y));
-                replaceApple(canvas);
-            }
 
             double movementInterval = Math.Max(INITIAL_SPEED_INTERVAL - ((double) score / MAX_SPEED_SCORE) * INITIAL_SPEED_INTERVAL, MIN_SPEED_INTERVAL);
             if(timer >= movementInterval)
@@ -127,7 +119,6 @@ namespace Term2DGame
                         x = snake[0].X;
                         y = snake[0].Y - 1;
                         break;
-
                     case 2:
                         x = snake[0].X;
                         y = snake[0].Y + 1;
@@ -140,13 +131,20 @@ namespace Term2DGame
                         x = snake[0].X + 1;
                         y = snake[0].Y;
                         break;
-
                     default:
                         break;
                 }
-                timer = 0.0;
                 snake.Insert(0, new Point(x, y));
-                snake.RemoveAt(snake.Count - 1);
+                if(appleEaten())
+                {
+                    score += 10;
+                    replaceApple(canvas);
+                }
+                else
+                {
+                    snake.RemoveAt(snake.Count - 1);
+                }
+                timer = 0.0;
             }
 
             canvas.Clear();
@@ -174,7 +172,7 @@ namespace Term2DGame
             if(snake[0].Y < 1 || snake[0].Y == canvas.GetHeight() - 1)
                 return false;
 
-            for(int i = 1; i < snake.Count - 1; i++)
+            for(int i = 1; i < snake.Count; i++)
             {
                 if(snake[0].X == snake[i].X && snake[0].Y == snake[i].Y)
                     return false;
