@@ -6,7 +6,6 @@ namespace Term2DGame
 {
     class TerminalSnakeGame : Game
     {
-        
         public struct Point
         {
             public Point(int x, int y)
@@ -17,56 +16,54 @@ namespace Term2DGame
 
             public int X { get; set; }
             public int Y { get; set; }
-
-            public override string ToString() => $"({X}, {Y})";
-            public override bool Equals(Object obj)
-            {
-                //Check for null and compare run-time types.
-                if ((obj == null) || ! this.GetType().Equals(obj.GetType()))
-                {
-                    return false;
-                }
-                else {
-                    Point p = (Point) obj;
-                    return (X == p.X) && (Y == p.Y);
-            }
         }
-        }
-        List<Point> snake = new List<Point>();
-
 
         public static void Main(string[] args)
         {
             Term2D.Start(new TerminalSnakeGame());
         }
+
+        // Game Information
+        List<Point> snake = new List<Point>();
+        Point apple;
+        double timer = 0.0;
+        Random rand = new Random();
+
         override public void Init(Canvas canvas)
         {
             Point p = new Point(canvas.GetWidth()/2, canvas.GetHeight()/2);
             snake.Add(p);
-            apple = new Point(12, 23);
+            replaceApple(canvas);
             Console.Title = "term2d Example Game";
             canvas.DefaultBackgroundColor = ConsoleColor.Black;
             canvas.DefaultForegroundColor = ConsoleColor.DarkGreen;
             canvas.Clear();
         }
 
-        double timer = 0.0;
-        Point apple;
-
         public bool appleEaten()
         {
             if(snake[0].X == apple.X && snake[0].Y == apple.Y)
                 return true;
-            
             else
                 return false;
-
         }
+
+        public void replaceApple(Canvas canvas)
+        {
+            int appleX;
+            int appleY;
+            do
+            {
+                appleX = rand.Next() % (canvas.GetWidth() - 1);
+                appleY = rand.Next() % (canvas.GetHeight() - 1);
+            } while (appleX == 0 || appleY == 0);
+            apple = new Point(appleX, appleY);
+        }
+
         int direction = 1; //1 is up, 2 is down, 3 is left, 4 is right
 
         override public bool Update(UpdateInfo updateInfo)
         {
-
             // Update Timer
             timer += updateInfo.DeltaTime;
             // Handle Logic
@@ -99,7 +96,6 @@ namespace Term2DGame
             // Update View
             Canvas canvas = updateInfo.ActiveCanvas;
             // clear & draw frame on canvas
-
             int x = 0;
             int y = 0;
             
@@ -130,24 +126,7 @@ namespace Term2DGame
                 }
 
                 snake.Insert(0, new Point(x, y));
-
-                var rand = new Random();
-
-                int applex = rand.Next() % (canvas.GetWidth() - 2);
-                int appley = rand.Next() % (canvas.GetHeight() - 2);
-
-                while(applex == 0 || appley == 0) //check for collisions here too
-                {
-                    applex = rand.Next() % (canvas.GetHeight() - 2);
-                    appley = rand.Next() % (canvas.GetWidth() - 2);
-                }
-
-                applex++;
-                appley++;
-
-                apple = new Point(applex, appley);
-
-
+                replaceApple(canvas);
             }
 
 
@@ -186,7 +165,7 @@ namespace Term2DGame
             }
 
             canvas.Clear();
-            char border = '#';
+            char border = '█';
 
             for(int i = 0; i < canvas.GetHeight(); i++)
             {
@@ -214,7 +193,7 @@ namespace Term2DGame
                     return false;
 
             for(int i = 0; i < snake.Count; i++)
-                canvas.Draw(snake[i].Y, snake[i].X, 'S');
+                canvas.Draw(snake[i].Y, snake[i].X, '█');
 
             canvas.Draw(apple.Y, apple.X, 'x');
             
