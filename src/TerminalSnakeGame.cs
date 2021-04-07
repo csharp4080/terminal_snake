@@ -23,18 +23,24 @@ namespace Term2DGame
             Term2D.Start(new TerminalSnakeGame());
         }
 
+        // Constants
+        const double BASE_SPEED_INTERVAL = 0.1;
+        const double MAX_SPEED_SCORE = 500;
+
         // Game Information
         List<Point> snake = new List<Point>();
         Point apple;
         double timer = 0.0;
         Random rand = new Random();
+        int score = 0;
+        bool showFPSCounter = false;
 
         override public void Init(Canvas canvas)
         {
             Point p = new Point(canvas.GetWidth()/2, canvas.GetHeight()/2);
             snake.Add(p);
             replaceApple(canvas);
-            Console.Title = "term2d Example Game";
+            Console.Title = "Terminal Snake";
             canvas.DefaultBackgroundColor = ConsoleColor.Black;
             canvas.DefaultForegroundColor = ConsoleColor.DarkGreen;
             canvas.Clear();
@@ -87,6 +93,9 @@ namespace Term2DGame
                         if(direction != 3)
                             direction = 4;
                         break;
+                    case ConsoleKey.F:
+                        showFPSCounter = !showFPSCounter;
+                        break;
                     case ConsoleKey.Escape:
                         return false;
                     default:
@@ -101,6 +110,7 @@ namespace Term2DGame
             
             if(appleEaten())
             {
+                score += 10;
                 switch(direction)
                 {
                     case 1:
@@ -129,7 +139,7 @@ namespace Term2DGame
                 replaceApple(canvas);
             }
 
-            if(timer >= 0.1)
+            if(timer >= BASE_SPEED_INTERVAL - ((double) score / MAX_SPEED_SCORE) * BASE_SPEED_INTERVAL)
             {
                 switch(direction)
                 {
@@ -160,19 +170,23 @@ namespace Term2DGame
             }
 
             canvas.Clear();
-            char border = '█';
 
             for(int i = 0; i < canvas.GetHeight(); i++)
             {
-                canvas.Draw(i, 0, border);
-                canvas.Draw(i, canvas.GetWidth()-1, border);
+                canvas.Draw(i, 0, '║', ConsoleColor.White, canvas.DefaultForegroundColor);
+                canvas.Draw(i, canvas.GetWidth()-1, '║', ConsoleColor.White, canvas.DefaultForegroundColor);
             }
 
             for(int i = 0; i < canvas.GetWidth(); i++)
             {
-                canvas.Draw(0, i, border);
-                canvas.Draw(canvas.GetHeight()-1, i, border);
+                canvas.Draw(0, i, '═', ConsoleColor.White, canvas.DefaultForegroundColor);
+                canvas.Draw(canvas.GetHeight()-1, i, '═', ConsoleColor.White, canvas.DefaultForegroundColor);
             }
+
+            canvas.Draw(0, 0, '╔', ConsoleColor.White, canvas.DefaultForegroundColor);
+            canvas.Draw(0, canvas.GetWidth()-1, '╗', ConsoleColor.White, canvas.DefaultForegroundColor);
+            canvas.Draw(canvas.GetHeight()-1, 0, '╚', ConsoleColor.White, canvas.DefaultForegroundColor);
+            canvas.Draw(canvas.GetHeight()-1, canvas.GetWidth()-1, '╝', ConsoleColor.White, canvas.DefaultForegroundColor);
 
             if(snake[0].X < 1 || snake[0].X == canvas.GetWidth() - 1)
                 return false;
@@ -206,6 +220,13 @@ namespace Term2DGame
                 canvas.Draw(snake[i].Y, snake[i].X, snakeChar);
             }
             canvas.Draw(apple.Y, apple.X, '■', ConsoleColor.Red, canvas.DefaultBackgroundColor);
+            // Render Game Name & FPS (If Enabled)
+            canvas.DrawText(0, 2, $" Terminal Snake ══ Score: {score} ", ConsoleColor.White, canvas.DefaultForegroundColor);
+            if (showFPSCounter)
+            {
+                double measuredFPS = 1.0 / updateInfo.DeltaTime;
+                canvas.DrawText(canvas.GetHeight() - 1, 2, $" FPS: {measuredFPS:0.0} ", ConsoleColor.White, canvas.DefaultForegroundColor);
+            }
             return true;
         }
     }
