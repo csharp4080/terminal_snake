@@ -136,7 +136,7 @@ namespace Term2DGame
                 int applex = rand.Next() % (canvas.GetWidth() - 2);
                 int appley = rand.Next() % (canvas.GetHeight() - 2);
 
-                if(applex == 0 || appley == 0) //check for collisions here too
+                while(applex == 0 || appley == 0) //check for collisions here too
                 {
                     applex = rand.Next() % (canvas.GetHeight() - 2);
                     appley = rand.Next() % (canvas.GetWidth() - 2);
