@@ -129,8 +129,6 @@ namespace Term2DGame
                 replaceApple(canvas);
             }
 
-
-
             if(timer >= 0.1)
             {
                 switch(direction)
@@ -156,11 +154,8 @@ namespace Term2DGame
                     default:
                         break;
                 }
-
                 timer = 0.0;
-
                 snake.Insert(0, new Point(x, y));
-
                 snake.RemoveAt(snake.Count - 1);
             }
 
@@ -185,21 +180,32 @@ namespace Term2DGame
             if(snake[0].Y < 1 || snake[0].Y == canvas.GetHeight() - 1)
                 return false;
 
-            // if(snake.IndexOf(snake[0]) > 0)
-            //     return false;
-
             for(int i = 1; i < snake.Count - 1; i++)
+            {
                 if(snake[0].X == snake[i].X && snake[0].Y == snake[i].Y)
                     return false;
-
-            for(int i = 0; i < snake.Count; i++)
-                canvas.Draw(snake[i].Y, snake[i].X, '█');
-
-            canvas.Draw(apple.Y, apple.X, 'x');
+            }
             
-
-
-
+            for(int i = 0; i < snake.Count; i++)
+            {
+                // Make Snake Trail Fade Towards Tail
+                char snakeChar;
+                double snakePosition = (double) i / snake.Count;
+                if (snakePosition < 0.4)
+                {
+                    snakeChar = '█';
+                }
+                else if (snakePosition < 0.8)
+                {
+                    snakeChar = '▓';
+                }
+                else
+                {
+                    snakeChar = '▒';
+                }
+                canvas.Draw(snake[i].Y, snake[i].X, snakeChar);
+            }
+            canvas.Draw(apple.Y, apple.X, '■', ConsoleColor.Red, canvas.DefaultBackgroundColor);
             return true;
         }
     }
