@@ -36,6 +36,7 @@ namespace Term2DGame
         int score = 0;
         bool showFPSCounter = false;
         bool alive = true;
+        bool paused = false;
 
         override public void Init(Canvas canvas)
         {
@@ -73,7 +74,10 @@ namespace Term2DGame
         override public bool Update(UpdateInfo updateInfo)
         {
             // Update Timer
-            timer += updateInfo.DeltaTime;
+            if (!paused)
+            {
+                timer += updateInfo.DeltaTime;
+            }
             // Handle Logic
             if (updateInfo.HasUnreadInput)
             {
@@ -94,6 +98,9 @@ namespace Term2DGame
                     case ConsoleKey.RightArrow:
                         if(direction != 3)
                             direction = 4;
+                        break;
+                    case ConsoleKey.P:
+                        paused = !paused;
                         break;
                     case ConsoleKey.F:
                         showFPSCounter = !showFPSCounter;
@@ -198,12 +205,16 @@ namespace Term2DGame
                 canvas.Draw(snake[i].Y, snake[i].X, snakeChar);
             }
             canvas.Draw(apple.Y, apple.X, '■', ConsoleColor.Red, canvas.DefaultBackgroundColor);
-            // Render Game Name & FPS (If Enabled)
+            // Render Status Indicator Text
             canvas.DrawText(0, 2, $" Terminal Snake ══ Score: {score} ", ConsoleColor.White, canvas.DefaultForegroundColor);
             if (showFPSCounter)
             {
                 double measuredFPS = 1.0 / updateInfo.DeltaTime;
                 canvas.DrawText(canvas.GetHeight() - 1, 2, $" FPS: {measuredFPS:0.0} ", ConsoleColor.White, canvas.DefaultForegroundColor);
+            }
+            if (paused)
+            {
+                canvas.DrawText(canvas.GetHeight() / 2, canvas.GetWidth() / 2 - 6, "** PAUSED **", ConsoleColor.Red, ConsoleColor.White);
             }
             return true;
         }
