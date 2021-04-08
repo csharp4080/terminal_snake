@@ -29,20 +29,25 @@ namespace Term2DGame
         const double MAX_SPEED_SCORE = 750; // what score represents the fastest motion interval
 
         // Game Information
-        List<Point> snake = new List<Point>();
+        List<Point> snake;
         Point apple;
-        double timer = 0.0;
         Random rand = new Random();
-        int score = 0;
+        int score;
+        double timer;
+        bool alive;
+        bool paused;
         bool showFPSCounter = false;
-        bool alive = true;
-        bool paused = false;
 
         override public void Init(Canvas canvas)
         {
+            snake = new List<Point>();
             Point p = new Point(canvas.GetWidth()/2, canvas.GetHeight()/2);
             snake.Add(p);
             replaceApple(canvas);
+            score = 0;
+            timer = 0.0;
+            alive = true;
+            paused = false;
             Console.Title = "Terminal Snake";
             canvas.DefaultBackgroundColor = ConsoleColor.Black;
             canvas.DefaultForegroundColor = ConsoleColor.DarkGreen;
@@ -74,8 +79,11 @@ namespace Term2DGame
 
         override public bool Update(UpdateInfo updateInfo)
         {
+            // Update View
+            Canvas canvas = updateInfo.ActiveCanvas;
+
             // Update Timer
-            if (!paused)
+            if (!paused && alive)
             {
                 timer += updateInfo.DeltaTime;
             }
@@ -85,18 +93,22 @@ namespace Term2DGame
                 switch (updateInfo.LastInput)
                 {
                     case ConsoleKey.UpArrow:
+                    case ConsoleKey.W:
                         if(currentDirection != 2)
                             queuedDirection = 1;
                         break;
                     case ConsoleKey.DownArrow:
+                    case ConsoleKey.S:
                         if(currentDirection != 1)
                             queuedDirection = 2;
                         break;
                     case ConsoleKey.LeftArrow:
+                    case ConsoleKey.A:
                         if(currentDirection != 4)
                             queuedDirection = 3;
                         break;
                     case ConsoleKey.RightArrow:
+                    case ConsoleKey.D:
                         if(currentDirection != 3)
                             queuedDirection = 4;
                         break;
@@ -106,14 +118,19 @@ namespace Term2DGame
                     case ConsoleKey.F:
                         showFPSCounter = !showFPSCounter;
                         break;
+                    case ConsoleKey.Spacebar:
+                        if (!alive)
+                        {
+                            Init(canvas);
+                            return true;
+                        }
+                        break;
                     case ConsoleKey.Escape:
                         return false;
                     default:
                         break;
                 }
             }
-            // Update View
-            Canvas canvas = updateInfo.ActiveCanvas;
             
             int x = 0;
             int y = 0;
@@ -176,15 +193,18 @@ namespace Term2DGame
             canvas.Draw(canvas.GetHeight()-1, canvas.GetWidth()-1, '╝', ConsoleColor.White, canvas.DefaultForegroundColor);
 
             if(snake[0].X < 1 || snake[0].X == canvas.GetWidth() - 1)
-                return false;
+                alive = false;
 
             if(snake[0].Y < 1 || snake[0].Y == canvas.GetHeight() - 1)
-                return false;
+                alive = false;
 
             for(int i = 1; i < snake.Count; i++)
             {
                 if(snake[0].X == snake[i].X && snake[0].Y == snake[i].Y)
-                    return false;
+                {
+                    alive = false;
+                    break;
+                }
             }
             
             for(int i = 0; i < snake.Count; i++)
@@ -217,6 +237,11 @@ namespace Term2DGame
             if (paused)
             {
                 canvas.DrawText(canvas.GetHeight() / 2, canvas.GetWidth() / 2 - 6, "** PAUSED **", ConsoleColor.Red, ConsoleColor.White);
+            }
+            if (!alive)
+            {
+                canvas.DrawText(canvas.GetHeight() / 2 - 2, canvas.GetWidth() / 2 - 6, "** snek ded **", ConsoleColor.White, ConsoleColor.Red);
+                canvas.DrawText(canvas.GetHeight() / 2, canvas.GetWidth() / 2 - 13, "ESC: Exit  SPACE: New Game");
             }
             return true;
         }
