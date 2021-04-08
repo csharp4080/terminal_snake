@@ -83,7 +83,7 @@ namespace Term2DGame
                     else
                         collision = false;
                 }
-            } while ((appleX == 0 || appleY == 0) && !collision);
+            } while (appleX == 0 || appleY == 0 || collision);
             apple = new Point(appleX, appleY);
         }
 
