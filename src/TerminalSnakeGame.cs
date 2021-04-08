@@ -66,11 +66,24 @@ namespace Term2DGame
         {
             int appleX;
             int appleY;
+            bool collision = false;
             do
             {
                 appleX = rand.Next() % (canvas.GetWidth() - 1);
                 appleY = rand.Next() % (canvas.GetHeight() - 1);
-            } while (appleX == 0 || appleY == 0);
+
+                for(int i = 0; i < snake.Count-1; i++)
+                {
+                    if(appleX == snake[i].X && appleY == snake[i].Y)
+                    {    
+                        collision = true;
+                        break;
+                    }
+
+                    else
+                        collision = false;
+                }
+            } while ((appleX == 0 || appleY == 0) && !collision);
             apple = new Point(appleX, appleY);
         }
 
