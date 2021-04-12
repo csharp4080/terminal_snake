@@ -157,6 +157,17 @@
                 main thread.
             </summary>
         </member>
+        <member name="M:term2d.ConsoleInputThread.AddEventListener(term2d.KeyInputListener)">
+            <summary>
+                Registers an event listener with the input thread,
+                allowing it to receive details whenever an event
+                occurs.
+            </summary>
+            <param name="listener">
+                An object implementing KeyInputListener to
+                receive console key events.
+            </param>
+        </member>
         <member name="M:term2d.ConsoleInputThread.Start">
             <summary>
                 Start taking user input.
@@ -165,18 +176,6 @@
         <member name="M:term2d.ConsoleInputThread.Stop">
             <summary>
                 Stop taking user input.
-            </summary>
-        </member>
-        <member name="M:term2d.ConsoleInputThread.ReadLast">
-            <summary>
-                Returns the last ConsoleKey read from the user,
-                no guarantees the input is new.
-            </summary>
-        </member>
-        <member name="M:term2d.ConsoleInputThread.HasUnreadInput">
-            <summary>
-                Returns true if an unread input is available,
-                otherwise false.
             </summary>
         </member>
         <member name="T:term2d.DefaultInitConfig">
@@ -218,11 +217,40 @@
                 true to continue running, false to end the game loop.
             </returns>
         </member>
+        <member name="M:term2d.Game.OnKeyEvent(System.ConsoleKeyInfo)">
+            <summary>
+                The OnKeyEvent() method will be called
+                asynchrounously from the game loop any time
+                the user enters a key into the console.
+            </summary>
+            <param name="keyInfo">
+                A ConsoleKeyInfo object detailing the
+                console key event.
+            </param>
+        </member>
         <member name="T:term2d.InitConfig">
             <summary>
                 An interface to abstract initialization
                 procedures for different platforms.
             </summary>
+        </member>
+        <member name="T:term2d.KeyInputListener">
+            <summary>
+                An interface allowing classes to receive
+                console key events detected by the console
+                input thread.
+            </summary>
+        </member>
+        <member name="M:term2d.KeyInputListener.OnKeyEvent(System.ConsoleKeyInfo)">
+            <summary>
+                The OnKeyEvent() method will be called
+                asynchrounously from the game loop any time
+                the user enters a key into the console.
+            </summary>
+            <param name="keyInfo">
+                A ConsoleKeyInfo object detailing the
+                console key event.
+            </param>
         </member>
         <member name="T:term2d.Term2D">
             <summary>
@@ -266,16 +294,6 @@
         <member name="P:term2d.UpdateInfo.ActiveCanvas">
             <summary>
                 Reference To The Active Canvas
-            </summary>
-        </member>
-        <member name="P:term2d.UpdateInfo.LastInput">
-            <summary>
-                The last key entered by the user.
-            </summary>
-        </member>
-        <member name="P:term2d.UpdateInfo.HasUnreadInput">
-            <summary>
-                Whether the input is new or has been previously read.
             </summary>
         </member>
         <member name="P:term2d.UpdateInfo.DeltaTime">

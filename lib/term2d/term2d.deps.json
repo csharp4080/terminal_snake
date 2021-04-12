@@ -6,7 +6,7 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v5.0": {
-      "term2d/0.2.0": {
+      "term2d/0.4.0": {
         "runtime": {
           "term2d.dll": {}
         }
@@ -14,7 +14,7 @@
     }
   },
   "libraries": {
-    "term2d/0.2.0": {
+    "term2d/0.4.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

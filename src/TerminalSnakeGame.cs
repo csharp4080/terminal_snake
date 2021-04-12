@@ -6,6 +6,11 @@ namespace Term2DGame
 {
     class TerminalSnakeGame : Game
     {
+        public static void Main(string[] args)
+        {
+            Term2D.Start(new TerminalSnakeGame());
+        }
+
         public struct Point
         {
             public Point(int x, int y)
@@ -16,11 +21,6 @@ namespace Term2DGame
 
             public int X { get; set; }
             public int Y { get; set; }
-        }
-
-        public static void Main(string[] args)
-        {
-            Term2D.Start(new TerminalSnakeGame());
         }
 
         // Constants
@@ -36,18 +36,22 @@ namespace Term2DGame
         double timer;
         bool alive;
         bool paused;
+        bool running;
         bool showFPSCounter = false;
+        Canvas canvas;
 
         override public void Init(Canvas canvas)
         {
+            this.canvas = canvas;
             snake = new List<Point>();
             Point p = new Point(canvas.GetWidth()/2, canvas.GetHeight()/2);
             snake.Add(p);
-            replaceApple(canvas);
+            replaceApple();
             score = 0;
             timer = 0.0;
             alive = true;
             paused = false;
+            running = true;
             Console.Title = "Terminal Snake";
             canvas.DefaultBackgroundColor = ConsoleColor.Black;
             canvas.DefaultForegroundColor = ConsoleColor.DarkGreen;
@@ -62,7 +66,7 @@ namespace Term2DGame
                 return false;
         }
 
-        public void replaceApple(Canvas canvas)
+        public void replaceApple()
         {
             int appleX;
             int appleY;
@@ -101,50 +105,6 @@ namespace Term2DGame
                 timer += updateInfo.DeltaTime;
             }
             // Handle Logic
-            if (updateInfo.HasUnreadInput)
-            {
-                switch (updateInfo.LastInput)
-                {
-                    case ConsoleKey.UpArrow:
-                    case ConsoleKey.W:
-                        if(currentDirection != 2)
-                            queuedDirection = 1;
-                        break;
-                    case ConsoleKey.DownArrow:
-                    case ConsoleKey.S:
-                        if(currentDirection != 1)
-                            queuedDirection = 2;
-                        break;
-                    case ConsoleKey.LeftArrow:
-                    case ConsoleKey.A:
-                        if(currentDirection != 4)
-                            queuedDirection = 3;
-                        break;
-                    case ConsoleKey.RightArrow:
-                    case ConsoleKey.D:
-                        if(currentDirection != 3)
-                            queuedDirection = 4;
-                        break;
-                    case ConsoleKey.P:
-                        paused = !paused;
-                        break;
-                    case ConsoleKey.F:
-                        showFPSCounter = !showFPSCounter;
-                        break;
-                    case ConsoleKey.Spacebar:
-                        if (!alive)
-                        {
-                            Init(canvas);
-                            return true;
-                        }
-                        break;
-                    case ConsoleKey.Escape:
-                        return false;
-                    default:
-                        break;
-                }
-            }
-            
             int x = 0;
             int y = 0;
 
@@ -177,7 +137,7 @@ namespace Term2DGame
                 if(appleEaten())
                 {
                     score += 10;
-                    replaceApple(canvas);
+                    replaceApple();
                 }
                 else
                 {
@@ -256,7 +216,52 @@ namespace Term2DGame
                 canvas.DrawText(canvas.GetHeight() / 2 - 2, canvas.GetWidth() / 2 - 6, "** snek ded **", ConsoleColor.White, ConsoleColor.Red);
                 canvas.DrawText(canvas.GetHeight() / 2, canvas.GetWidth() / 2 - 13, "ESC: Exit  SPACE: New Game");
             }
-            return true;
+            return running;
+        }
+
+        public override void OnKeyEvent(ConsoleKeyInfo keyInfo)
+        {
+            // Handle Console Key Inputs
+            switch (keyInfo.Key)
+            {
+                case ConsoleKey.UpArrow:
+                case ConsoleKey.W:
+                    if(currentDirection != 2)
+                        queuedDirection = 1;
+                    break;
+                case ConsoleKey.DownArrow:
+                case ConsoleKey.S:
+                    if(currentDirection != 1)
+                        queuedDirection = 2;
+                    break;
+                case ConsoleKey.LeftArrow:
+                case ConsoleKey.A:
+                    if(currentDirection != 4)
+                        queuedDirection = 3;
+                    break;
+                case ConsoleKey.RightArrow:
+                case ConsoleKey.D:
+                    if(currentDirection != 3)
+                        queuedDirection = 4;
+                    break;
+                case ConsoleKey.P:
+                    paused = !paused;
+                    break;
+                case ConsoleKey.F:
+                    showFPSCounter = !showFPSCounter;
+                    break;
+                case ConsoleKey.Spacebar:
+                    if (!alive)
+                    {
+                        Init(canvas);
+                    }
+                    break;
+                case ConsoleKey.Escape:
+                    running = false;
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }
