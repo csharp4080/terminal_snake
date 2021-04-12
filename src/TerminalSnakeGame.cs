@@ -8,9 +8,15 @@ namespace Term2DGame
     {
         public static void Main(string[] args)
         {
+            Console.Title = "Terminal Snake";
             Term2D.Start(new TerminalSnakeGame());
         }
 
+        /// <summary>
+        ///     Represents a single point in the game,
+        ///     with coordinates relative to the
+        ///     top left corner of the gameplay area.
+        /// </summary>
         struct Point
         {
             public Point(int x, int y)
@@ -23,6 +29,10 @@ namespace Term2DGame
             public int Y { get; set; }
         }
 
+        /// <summary>
+        ///     Represents directions the snake
+        ///     can move in.
+        /// </summary>
         enum SnakeDirection
         {
             UP, DOWN, LEFT, RIGHT
@@ -33,31 +43,38 @@ namespace Term2DGame
         const double MIN_SPEED_INTERVAL = 0.02; // the cap for how fast the interval can become
         const double MAX_SPEED_SCORE = 750; // what score represents the fastest motion interval
 
-        // Game Information
+        // Overall State Information
+        bool running = true;
+        bool showFPSCounter = false;
+        Random rand = new Random();
+
+        // Gameplay State Information
         List<Point> snake;
         Point apple;
-        Random rand = new Random();
         int score;
         double timer;
         bool alive;
         bool paused;
-        bool running;
-        bool showFPSCounter = false;
         Canvas canvas;
 
         override public void Init(Canvas canvas)
         {
+            // Save Canvas For Easy Future Reference
             this.canvas = canvas;
+            // Reset Snake At Center Point
             snake = new List<Point>();
-            Point p = new Point(canvas.GetWidth()/2, canvas.GetHeight()/2);
-            snake.Add(p);
+            Point center = new Point(canvas.GetWidth()/2, canvas.GetHeight()/2);
+            snake.Add(center);
+            // Place Apple @ Random Valid Point
             replaceApple();
+            // Reset Score, Movement Timer
             score = 0;
             timer = 0.0;
+            // Reset Game State
             alive = true;
             paused = false;
             running = true;
-            Console.Title = "Terminal Snake";
+            // Prepare Canvas
             canvas.DefaultBackgroundColor = ConsoleColor.Black;
             canvas.DefaultForegroundColor = ConsoleColor.DarkGreen;
             canvas.Clear();
@@ -109,6 +126,7 @@ namespace Term2DGame
             {
                 timer += updateInfo.DeltaTime;
             }
+
             // Handle Logic
             int x = 0;
             int y = 0;
@@ -151,6 +169,22 @@ namespace Term2DGame
                 timer = 0.0;
             }
 
+            if(snake[0].X < 1 || snake[0].X == canvas.GetWidth() - 1)
+                alive = false;
+
+            if(snake[0].Y < 1 || snake[0].Y == canvas.GetHeight() - 1)
+                alive = false;
+
+            for(int i = 1; i < snake.Count; i++)
+            {
+                if(snake[0].X == snake[i].X && snake[0].Y == snake[i].Y)
+                {
+                    alive = false;
+                    break;
+                }
+            }
+
+            // Render Frame
             canvas.Clear();
 
             for(int i = 0; i < canvas.GetHeight(); i++)
@@ -169,22 +203,8 @@ namespace Term2DGame
             canvas.Draw(0, canvas.GetWidth()-1, '╗', ConsoleColor.White, canvas.DefaultForegroundColor);
             canvas.Draw(canvas.GetHeight()-1, 0, '╚', ConsoleColor.White, canvas.DefaultForegroundColor);
             canvas.Draw(canvas.GetHeight()-1, canvas.GetWidth()-1, '╝', ConsoleColor.White, canvas.DefaultForegroundColor);
-
-            if(snake[0].X < 1 || snake[0].X == canvas.GetWidth() - 1)
-                alive = false;
-
-            if(snake[0].Y < 1 || snake[0].Y == canvas.GetHeight() - 1)
-                alive = false;
-
-            for(int i = 1; i < snake.Count; i++)
-            {
-                if(snake[0].X == snake[i].X && snake[0].Y == snake[i].Y)
-                {
-                    alive = false;
-                    break;
-                }
-            }
             
+            // Draw Snake
             for(int i = 0; i < snake.Count; i++)
             {
                 // Make Snake Trail Fade Towards Tail
@@ -204,8 +224,11 @@ namespace Term2DGame
                 }
                 canvas.Draw(snake[i].Y, snake[i].X, snakeChar);
             }
+
+            // Draw Apple
             canvas.Draw(apple.Y, apple.X, '■', ConsoleColor.Red, canvas.DefaultBackgroundColor);
-            // Render Status Indicator Text
+            
+            // Draw Status Indicators
             canvas.DrawText(0, 2, $" Terminal Snake ══ Score: {score} ", ConsoleColor.White, canvas.DefaultForegroundColor);
             if (showFPSCounter)
             {
