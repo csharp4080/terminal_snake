@@ -11,7 +11,7 @@ namespace Term2DGame
             Term2D.Start(new TerminalSnakeGame());
         }
 
-        public struct Point
+        struct Point
         {
             public Point(int x, int y)
             {
@@ -21,6 +21,11 @@ namespace Term2DGame
 
             public int X { get; set; }
             public int Y { get; set; }
+        }
+
+        enum SnakeDirection
+        {
+            UP, DOWN, LEFT, RIGHT
         }
 
         // Constants
@@ -91,8 +96,8 @@ namespace Term2DGame
             apple = new Point(appleX, appleY);
         }
 
-        int queuedDirection = 1; //1 is up, 2 is down, 3 is left, 4 is right
-        int currentDirection = 1;
+        SnakeDirection queuedDirection = SnakeDirection.UP;
+        SnakeDirection currentDirection = SnakeDirection.UP;
 
         override public bool Update(UpdateInfo updateInfo)
         {
@@ -113,19 +118,19 @@ namespace Term2DGame
             {
                 switch(queuedDirection)
                 {
-                    case 1:
+                    case SnakeDirection.UP:
                         x = snake[0].X;
                         y = snake[0].Y - 1;
                         break;
-                    case 2:
+                    case SnakeDirection.DOWN:
                         x = snake[0].X;
                         y = snake[0].Y + 1;
                         break;
-                    case 3:
+                    case SnakeDirection.LEFT:
                         x = snake[0].X - 1;
                         y = snake[0].Y;
                         break;
-                    case 4:
+                    case SnakeDirection.RIGHT:
                         x = snake[0].X + 1;
                         y = snake[0].Y;
                         break;
@@ -226,23 +231,23 @@ namespace Term2DGame
             {
                 case ConsoleKey.UpArrow:
                 case ConsoleKey.W:
-                    if(currentDirection != 2)
-                        queuedDirection = 1;
+                    if(currentDirection != SnakeDirection.DOWN)
+                        queuedDirection = SnakeDirection.UP;
                     break;
                 case ConsoleKey.DownArrow:
                 case ConsoleKey.S:
-                    if(currentDirection != 1)
-                        queuedDirection = 2;
+                    if(currentDirection != SnakeDirection.UP)
+                        queuedDirection = SnakeDirection.DOWN;
                     break;
                 case ConsoleKey.LeftArrow:
                 case ConsoleKey.A:
-                    if(currentDirection != 4)
-                        queuedDirection = 3;
+                    if(currentDirection != SnakeDirection.RIGHT)
+                        queuedDirection = SnakeDirection.LEFT;
                     break;
                 case ConsoleKey.RightArrow:
                 case ConsoleKey.D:
-                    if(currentDirection != 3)
-                        queuedDirection = 4;
+                    if(currentDirection != SnakeDirection.LEFT)
+                        queuedDirection = SnakeDirection.RIGHT;
                     break;
                 case ConsoleKey.P:
                     paused = !paused;
