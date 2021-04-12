@@ -131,7 +131,13 @@ namespace Term2DGame
             int x = 0;
             int y = 0;
 
+            // Calculate Interval Between Each Snake Movement
             double movementInterval = Math.Max(INITIAL_SPEED_INTERVAL - ((double) score / MAX_SPEED_SCORE) * INITIAL_SPEED_INTERVAL, MIN_SPEED_INTERVAL);
+            // Compensate For Blocks Having Larger Height Than Width
+            if (currentDirection == SnakeDirection.LEFT || currentDirection == SnakeDirection.RIGHT)
+            {
+                movementInterval /= 1.25;
+            }
             if(timer >= movementInterval)
             {
                 switch(queuedDirection)
