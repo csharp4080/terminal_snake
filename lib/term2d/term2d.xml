@@ -40,6 +40,18 @@
                 or initialized.
             </summary>
         </member>
+        <member name="P:term2d.Canvas.Width">
+            <summary>
+                The width of the canvas, independent
+                of console window size.
+            </summary>
+        </member>
+        <member name="P:term2d.Canvas.Height">
+            <summary>
+                The height of the canvas, independent
+                of console window size.
+            </summary>
+        </member>
         <member name="M:term2d.Canvas.#ctor">
             <summary>
                 Initialize a Canvas with default values.
@@ -94,24 +106,6 @@
             <summary>
                 Clears the canvas using default settings.
             </summary>
-        </member>
-        <member name="M:term2d.Canvas.GetWidth">
-            <summary>
-                Get the width of the canvas, independent
-                of console window size.
-            </summary>
-            <returns>
-                The width of the canavs.
-            </returns>
-        </member>
-        <member name="M:term2d.Canvas.GetHeight">
-            <summary>
-                Get the height of the canvas, independent
-                of console window size.
-            </summary>
-            <returns>
-                The height of the canavs.
-            </returns>
         </member>
         <member name="M:term2d.Canvas.Render">
             <summary>

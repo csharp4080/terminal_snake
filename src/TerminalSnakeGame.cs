@@ -63,7 +63,7 @@ namespace Term2DGame
             this.canvas = canvas;
             // Reset Snake At Center Point
             snake = new List<Point>();
-            Point center = new Point(canvas.GetWidth()/2, canvas.GetHeight()/2);
+            Point center = new Point(canvas.Width / 2, canvas.Height / 2);
             snake.Add(center);
             // Place Apple @ Random Valid Point
             replaceApple();
@@ -95,8 +95,8 @@ namespace Term2DGame
             bool collision = false;
             do
             {
-                appleX = rand.Next() % (canvas.GetWidth() - 1);
-                appleY = rand.Next() % (canvas.GetHeight() - 1);
+                appleX = rand.Next() % (canvas.Width - 1);
+                appleY = rand.Next() % (canvas.Height - 1);
 
                 for(int i = 0; i < snake.Count-1; i++)
                 {
@@ -175,10 +175,10 @@ namespace Term2DGame
                 timer = 0.0;
             }
 
-            if(snake[0].X < 1 || snake[0].X == canvas.GetWidth() - 1)
+            if(snake[0].X < 1 || snake[0].X == canvas.Width - 1)
                 alive = false;
 
-            if(snake[0].Y < 1 || snake[0].Y == canvas.GetHeight() - 1)
+            if(snake[0].Y < 1 || snake[0].Y == canvas.Height - 1)
                 alive = false;
 
             for(int i = 1; i < snake.Count; i++)
@@ -193,22 +193,22 @@ namespace Term2DGame
             // Render Frame
             canvas.Clear();
 
-            for(int i = 0; i < canvas.GetHeight(); i++)
+            for(int i = 0; i < canvas.Height; i++)
             {
                 canvas.Draw(i, 0, '║', ConsoleColor.White, canvas.DefaultForegroundColor);
-                canvas.Draw(i, canvas.GetWidth()-1, '║', ConsoleColor.White, canvas.DefaultForegroundColor);
+                canvas.Draw(i, canvas.Width - 1, '║', ConsoleColor.White, canvas.DefaultForegroundColor);
             }
 
-            for(int i = 0; i < canvas.GetWidth(); i++)
+            for(int i = 0; i < canvas.Width; i++)
             {
                 canvas.Draw(0, i, '═', ConsoleColor.White, canvas.DefaultForegroundColor);
-                canvas.Draw(canvas.GetHeight()-1, i, '═', ConsoleColor.White, canvas.DefaultForegroundColor);
+                canvas.Draw(canvas.Height - 1, i, '═', ConsoleColor.White, canvas.DefaultForegroundColor);
             }
 
             canvas.Draw(0, 0, '╔', ConsoleColor.White, canvas.DefaultForegroundColor);
-            canvas.Draw(0, canvas.GetWidth()-1, '╗', ConsoleColor.White, canvas.DefaultForegroundColor);
-            canvas.Draw(canvas.GetHeight()-1, 0, '╚', ConsoleColor.White, canvas.DefaultForegroundColor);
-            canvas.Draw(canvas.GetHeight()-1, canvas.GetWidth()-1, '╝', ConsoleColor.White, canvas.DefaultForegroundColor);
+            canvas.Draw(0, canvas.Width - 1, '╗', ConsoleColor.White, canvas.DefaultForegroundColor);
+            canvas.Draw(canvas.Height - 1, 0, '╚', ConsoleColor.White, canvas.DefaultForegroundColor);
+            canvas.Draw(canvas.Height - 1, canvas.Width - 1, '╝', ConsoleColor.White, canvas.DefaultForegroundColor);
             
             // Draw Snake
             for(int i = 0; i < snake.Count; i++)
@@ -239,16 +239,16 @@ namespace Term2DGame
             if (showFPSCounter)
             {
                 double measuredFPS = 1.0 / updateInfo.DeltaTime;
-                canvas.DrawText(canvas.GetHeight() - 1, 2, $" FPS: {measuredFPS:0.0} ", ConsoleColor.White, canvas.DefaultForegroundColor);
+                canvas.DrawText(canvas.Height - 1, 2, $" FPS: {measuredFPS:0.0} ", ConsoleColor.White, canvas.DefaultForegroundColor);
             }
             if (paused)
             {
-                canvas.DrawText(canvas.GetHeight() / 2, canvas.GetWidth() / 2 - 6, "** PAUSED **", ConsoleColor.Red, ConsoleColor.White);
+                canvas.DrawText(canvas.Height / 2, canvas.Width / 2 - 6, "** PAUSED **", ConsoleColor.Red, ConsoleColor.White);
             }
             if (!alive)
             {
-                canvas.DrawText(canvas.GetHeight() / 2 - 2, canvas.GetWidth() / 2 - 6, "** snek ded **", ConsoleColor.White, ConsoleColor.Red);
-                canvas.DrawText(canvas.GetHeight() / 2, canvas.GetWidth() / 2 - 13, "ESC: Exit  SPACE: New Game");
+                canvas.DrawText(canvas.Height / 2 - 2, canvas.Width / 2 - 6, "** snek ded **", ConsoleColor.White, ConsoleColor.Red);
+                canvas.DrawText(canvas.Height / 2, canvas.Width / 2 - 13, "ESC: Exit  SPACE: New Game");
             }
             return running;
         }
