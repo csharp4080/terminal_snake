@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="term2d">
+    <Reference Include="term2d, Version 0.4.0.0">
       <HintPath>lib/term2d/term2d.dll</HintPath>
     </Reference>
   </ItemGroup>
